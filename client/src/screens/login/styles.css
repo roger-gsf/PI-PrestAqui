@@ -1,0 +1,19 @@
+body {
+    background-color: var(--blue-dark);
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+
+main {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    height: 50vh;
+}
