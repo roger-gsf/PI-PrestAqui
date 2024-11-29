@@ -17,6 +17,7 @@ img {
 
 h1{
     font-size: 1.1em;
+    color: var(--white);
 }
 
 h2 {
@@ -32,7 +33,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 20px;
+    gap: 50px;
     align-items: center;
     
 }
@@ -45,20 +46,61 @@ form {
     flex-direction: column;
     gap: 25px;
 
-    width: 65%;
+    width: 70%;
+}
+
+input {
+    text-transform: uppercase;
+    font-weight: bold;
+    all: unset;
 }
 
 input[type='text'] {
-    height: 35px;
+    height: 40px;
 
     border-radius: 5px;
     border: none;
+
+    font-size: .9em;
 
 
     background: var(--input-type-text-color);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
+    /* color: var(--blue-dark); */
+    color: #0f1f3c;
+    /* color: blue; */
+    text-indent: 40px;
+    font-weight: bold;
+    /* padding: 2px; */
 
+
+}
+
+input#username {
+    background-image: url('../../assets/img/Customer.png');
+    background-repeat: no-repeat;
+    background-position: 10px;
+}
+
+
+input#password {
+    background-image: url('../../assets/img/Lock.png');
+    background-repeat: no-repeat;
+    background-position: 10px;
+}
+
+
+input[type='submit']{
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background-color: var(--button-color);
+    font-weight: bold;
+    color: var(--white);
+    
 
 }
 
