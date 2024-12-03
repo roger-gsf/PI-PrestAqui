@@ -1,18 +1,18 @@
-CREATE DATABASE PrestAquiDB;
-USE PrestAquiDB;
-CREATE TABLE Customer (
+CREATE DATABASE prestaqui;
+USE prestaqui;
+CREATE TABLE customer (
     id INT PRIMARY KEY,
     name_ VARCHAR(255) NOT NULL,
-    phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(8) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
     state_ VARCHAR(100) NOT NULL,
     city VARCHAR(100) NOT NULL,
-    address_ VARCHAR(100) NOT NULL,
+    address_ VARCHAR(255) NOT NULL,
     neighbornhood VARCHAR(100) NOT NULL,
     avatar_path BLOB,
     description_ TEXT
 );
-CREATE TABLE ServiceProvider (
+CREATE TABLE service_provider (
     id INT PRIMARY KEY,
     name_ VARCHAR(255) NOT NULL,
     phone VARCHAR(14) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE ServiceProvider (
     profile_ VARCHAR(255) NOT NULL,
     description_ TEXT
 );
-CREATE TABLE Categories (
+CREATE TABLE categories (
     id INT PRIMARY KEY,
     name_ ENUM(
         'Eletricista',
@@ -35,14 +35,14 @@ CREATE TABLE Categories (
         'Fotógrafo'
     ) NOT NULL
 );
-CREATE TABLE ProviderCategory (
+CREATE TABLE provider_category (
     id INT PRIMARY KEY,
     category_id INT NOT NULL,
     service_provider_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Categories(id),
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
-CREATE TABLE Availability (
+CREATE TABLE availability_ (
     id INT PRIMARY KEY,
     service_provider_id INT NOT NULL,
     start_time TIME NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE Availability (
     intervale INT NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
-CREATE TABLE Scheduling (
+CREATE TABLE scheduling (
     id INT PRIMARY KEY,
     customer_id INT NOT NULL,
     service_provider_id INT NOT NULL,

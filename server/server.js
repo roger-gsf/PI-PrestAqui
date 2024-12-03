@@ -18,7 +18,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root', // Ajuste conforme necessário
     password: '', // Insira a senha se aplicável
-    database: 'login_system' // Nome do banco de dados
+    database: 'prestaqui' // Nome do banco de dados
 });
 
 // Conecta ao banco de dados e exibe mensagem de sucesso ou erro
