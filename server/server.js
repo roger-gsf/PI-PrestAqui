@@ -1,4 +1,4 @@
-// Importa os módulos necessários para configurar o servidor
+// Import the necessary modules to set up the server
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
@@ -7,126 +7,126 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 const app = express();
-const SECRET_KEY = 'seu_segredo_aqui'; // Substitua por um segredo seguro para gerar tokens JWT
+const SECRET_KEY = 'your_secret_here'; // Replace with a secure secret for generating JWT tokens
 
-// Middleware para habilitar o CORS (Cross-Origin Resource Sharing)
+// Middleware to enable CORS (Cross-Origin Resource Sharing)
 app.use(cors());
-app.use(bodyParser.json()); // Middleware para processar o corpo das requisições em JSON
+app.use(bodyParser.json()); // Middleware to process the body of requests in JSON
 
-// Configura a conexão com o banco de dados MySQL
+// Configure the connection to the MySQL database
 const db = mysql.createConnection({
     host: 'localhost',
-    user: 'root', // Ajuste conforme necessário
-    password: '', // Insira a senha se aplicável
-    database: 'prestaqui' // Nome do banco de dados
+    user: 'root', // Adjust as needed
+    password: '', // Insert password if applicable
+    database: 'prestaqui' // Database name
 });
 
-// Conecta ao banco de dados e exibe mensagem de sucesso ou erro
+// Connect to the database and display success or error message
 db.connect((err) => {
     if (err) throw err;
-    console.log('Conectado ao banco de dados MySQL!');
+    console.log('Connected to the MySQL database!');
 });
 
-// Rota para registrar usuários
+// Route to register users
 app.post('/register', async (req, res) => {
-    const { email, password } = req.body; // Obtém o email e senha do corpo da requisição
-    const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a senha para segurança
+    const { email, password } = req.body; // Get email and password from the request body
+    const hashedPassword = await bcrypt.hash(password, 10); // Encrypt the password for security
 
-    // Verifica se o usuário já existe
+    // Check if the user already exists
     db.query('SELECT email FROM users WHERE email = ?', [email], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
-            return res.status(400).send('Usuário já existe');
+            return res.status(400).send('User already exists');
         }
 
-        // Insere o novo usuário no banco de dados
+        // Insert the new user into the database
         db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword], (err, result) => {
             if (err) throw err;
-            res.send('Usuário registrado com sucesso');
+            res.send('User registered successfully');
         });
     });
 });
 
-// Rota para login de usuários
+// Route to login users
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body; // Obtém o email e senha do corpo da requisição
+    const { email, password } = req.body; // Get email and password from the request body
 
-    // Consulta o usuário no banco de dados
+    // Query the user in the database
     db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
         if (err) throw err;
 
-        // Verifica se o usuário existe e se a senha está correta
+        // Check if the user exists and if the password is correct
         if (result.length === 0 || !(await bcrypt.compare(password, result[0].password))) {
-            return res.status(400).send('Email ou senha inválidos');
+            return res.status(400).send('Invalid email or password');
         }
 
-        // Gera o token JWT
-        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' }); // Define validade de 1 hora
-        res.json({ token }); // Retorna o token ao cliente
+        // Generate the JWT token
+        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' }); // Set token expiration to 1 hour
+        res.json({ token }); // Return the token to the client
     });
 });
 
-// Middleware para verificar o token JWT nas requisições
+// Middleware to verify the JWT token in requests
 const authenticateToken = (req, res, next) => {
-    // Extrai o token do cabeçalho de autorização
+    // Extract the token from the authorization header
     const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
 
-    if (!token) return res.sendStatus(401); // Retorna 401 se não houver token
+    if (!token) return res.sendStatus(401); // Return 401 if there is no token
 
     jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.sendStatus(403); // Retorna 403 se o token for inválido ou expirado
-        req.user = user; // Armazena o email do usuário no objeto `req` para uso futuro
-        next(); // Passa para a próxima função
+        if (err) return res.sendStatus(403); // Return 403 if the token is invalid or expired
+        req.user = user; // Store the user's email in the req object for future use
+        next(); // Proceed to the next function
     });
 };
 
-// Rota para obter dados do usuário logado
+// Route to get the logged-in user's data
 app.get('/user', authenticateToken, (req, res) => {
-    // Consulta o email do usuário com base no email armazenado no token
+    // Query the user's email based on the email stored in the token
     db.query('SELECT email FROM users WHERE email = ?', [req.user.email], (err, result) => {
         if (err) throw err;
 
         if (result.length === 0) {
-            return res.status(404).send('Usuário não encontrado');
+            return res.status(404).send('User not found');
         }
 
-        res.json(result[0]); // Retorna os dados do usuário
+        res.json(result[0]); // Return the user's data
     });
 });
 
-// Rota para atualizar informações do usuário
+// Route to update the user's information
 app.put('/user', authenticateToken, async (req, res) => {
-    const { newEmail, newPassword } = req.body;  // Obtém o novo email e a nova senha
-    const hashedPassword = await bcrypt.hash(newPassword, 10); // Criptografa a nova senha
+    const { newEmail, newPassword } = req.body;  // Get the new email and new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10); // Encrypt the new password
 
-    // Atualiza o email e senha do usuário
+    // Update the user's email and password
     db.query('UPDATE users SET email = ?, password = ? WHERE email = ?', [newEmail, hashedPassword, req.user.email], (err, result) => {
         if (err) throw err;
 
-        // Verifica se a atualização foi bem-sucedida
+        // Check if the update was successful
         if (result.affectedRows === 0) {
-            return res.status(404).send('Usuário não encontrado');
+            return res.status(404).send('User not found');
         }
 
-        res.send('Usuário atualizado com sucesso');
+        res.send('User updated successfully');
     });
 });
 
-// Rota para deletar o usuário
+// Route to delete the user
 app.delete('/user', authenticateToken, (req, res) => {
-    // Exclui o usuário com base no email do token
+    // Delete the user based on the email from the token
     db.query('DELETE FROM users WHERE email = ?', [req.user.email], (err, result) => {
         if (err) throw err;
 
         if (result.affectedRows === 0) {
-            return res.status(404).send('Usuário não encontrado');
+            return res.status(404).send('User not found');
         }
 
-        res.send('Usuário deletado com sucesso');
+        res.send('User deleted successfully');
     });
 });
 
-// Inicia o servidor na porta 3000
+// Start the server on port 3000
 app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+    console.log('Server running on port 3000');
 });

@@ -12,18 +12,20 @@ CREATE TABLE customer (
     avatar_path BLOB,
     description_ TEXT
 );
+
 CREATE TABLE service_provider (
     id INT PRIMARY KEY,
     name_ VARCHAR(255) NOT NULL,
     phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(8) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
     state_ VARCHAR(100) NOT NULL,
     city VARCHAR(100) NOT NULL,
     address_ VARCHAR(100) NOT NULL,
     neighbornhood VARCHAR(100) NOT NULL,
-    profile_ VARCHAR(255) NOT NULL,
+    avatar_path BLOB
     description_ TEXT
 );
+
 CREATE TABLE categories (
     id INT PRIMARY KEY,
     name_ ENUM(
@@ -63,7 +65,7 @@ CREATE TABLE scheduling (
         'Pendente',
         'Concluído',
         'Cancelado',
-        'Aguardando validaçao'
+        'Aguardando validação'
     ) NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer(id),
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id),
