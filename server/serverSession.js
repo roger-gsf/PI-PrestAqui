@@ -3,21 +3,29 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const session = require('express-session');  // Import express-session
+require('dotenv').config()
 
 const app = express();
-const SECRET_KEY = process.env.SECRET_KEY; // Replace with a secure secret for generating JWT tokens
 
 // Middleware to enable CORS (Cross-Origin Resource Sharing)
 app.use(cors());
 app.use(bodyParser.json()); // Middleware to process the body of requests in JSON
 
+// Set up session middleware
+app.use(session({
+    secret: 'your_secret_here', // Secret key for session signing
+    resave: false,              // Don't resave sessions if they haven't been modified
+    saveUninitialized: true,    // Save session even if it is new (but empty)
+    cookie: { secure: false }   // Set `secure: true` for HTTPS in production
+}));
+
 // Configure the connection to the MySQL database
 const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER, // Adjust as needed
-    password: process.env.DB_PASSWORD, // Insert password if applicable
+    host: 'localhost',
+    user: 'root', // Adjust as needed
+    password: '', // Insert password if applicable
     database: 'prestaqui' // Database name
 });
 
@@ -29,11 +37,13 @@ db.connect((err) => {
 
 // Route to register users
 app.post('/register', async (req, res) => {
-    const { name_, phone, cep, state_, city, address, neighbornhood, avatar_path, description_} = req.body; // Get email and password from the request body
+    const { name_, phone_, cep_, state_, city_, address_, neighbornhood_,
+        avatar_path_, description_ } = req.body; // Get email and password from the request body
+
     const hashedPassword = await bcrypt.hash(password, 10); // Encrypt the password for security
 
     // Check if the user already exists
-    db.query('SELECT email FROM users WHERE email = ?', [email], (err, result) => {
+    db.query('SELECT name_ FROM users WHERE  = ?', [email], (err, result) => {
         if (err) throw err;
         if (result.length > 0) {
             return res.status(400).send('User already exists');
@@ -60,30 +70,26 @@ app.post('/login', async (req, res) => {
             return res.status(400).send('Invalid email or password');
         }
 
-        // Generate the JWT token
-        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' }); // Set token expiration to 1 hour
-        res.json({ token }); // Return the token to the client
+        // Save user email in the session
+        req.session.user = { email }; // Store user email in the session
+        res.send('Logged in successfully!');
     });
 });
 
-// Middleware to verify the JWT token in requests
-const authenticateToken = (req, res, next) => {
-    // Extract the token from the authorization header
-    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-
-    if (!token) return res.sendStatus(401); // Return 401 if there is no token
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.sendStatus(403); // Return 403 if the token is invalid or expired
-        req.user = user; // Store the user's email in the req object for future use
-        next(); // Proceed to the next function
-    });
+// Middleware to check if the user is authenticated via session
+const authenticateSession = (req, res, next) => {
+    if (!req.session.user) {
+        return res.status(401).send('Unauthorized');
+    }
+    next(); // Proceed if the user is authenticated
 };
 
 // Route to get the logged-in user's data
-app.get('/user', authenticateToken, (req, res) => {
-    // Query the user's email based on the email stored in the token
-    db.query('SELECT email FROM users WHERE email = ?', [req.user.email], (err, result) => {
+app.get('/user', authenticateSession, (req, res) => {
+    const { email } = req.session.user;
+
+    // Query the user's email based on the email stored in the session
+    db.query('SELECT email FROM users WHERE email = ?', [email], (err, result) => {
         if (err) throw err;
 
         if (result.length === 0) {
@@ -95,12 +101,12 @@ app.get('/user', authenticateToken, (req, res) => {
 });
 
 // Route to update the user's information
-app.put('/user', authenticateToken, async (req, res) => {
+app.put('/user', authenticateSession, async (req, res) => {
     const { newEmail, newPassword } = req.body;  // Get the new email and new password
     const hashedPassword = await bcrypt.hash(newPassword, 10); // Encrypt the new password
 
     // Update the user's email and password
-    db.query('UPDATE users SET email = ?, password = ? WHERE email = ?', [newEmail, hashedPassword, req.user.email], (err, result) => {
+    db.query('UPDATE users SET email = ?, password = ? WHERE email = ?', [newEmail, hashedPassword, req.session.user.email], (err, result) => {
         if (err) throw err;
 
         // Check if the update was successful
@@ -108,21 +114,38 @@ app.put('/user', authenticateToken, async (req, res) => {
             return res.status(404).send('User not found');
         }
 
+        // Update session data after email change
+        req.session.user.email = newEmail; // Update session email to new email
+
         res.send('User updated successfully');
     });
 });
 
 // Route to delete the user
-app.delete('/user', authenticateToken, (req, res) => {
-    // Delete the user based on the email from the token
-    db.query('DELETE FROM users WHERE email = ?', [req.user.email], (err, result) => {
+app.delete('/user', authenticateSession, (req, res) => {
+    // Delete the user based on the email from the session
+    db.query('DELETE FROM users WHERE email = ?', [req.session.user.email], (err, result) => {
         if (err) throw err;
 
         if (result.affectedRows === 0) {
             return res.status(404).send('User not found');
         }
 
-        res.send('User deleted successfully');
+        // Destroy the session after user deletion
+        req.session.destroy((err) => {
+            if (err) throw err;
+            res.send('User deleted and session destroyed');
+        });
+    });
+});
+
+// Route to logout the user
+app.post('/logout', authenticateSession, (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('Failed to log out');
+        }
+        res.send('Logged out successfully');
     });
 });
 

@@ -3,26 +3,31 @@ USE prestaqui;
 CREATE TABLE customer (
     id INT PRIMARY KEY,
     name_ VARCHAR(255) NOT NULL,
-    phone VARCHAR(15) NOT NULL,
-    cep VARCHAR(9) NOT NULL,
+    email_ VARCHAR(255) NOT NULL UNIQUE,
+    password_ VARCHAR(255) NOT NULL, 
+    phone_ VARCHAR(15) NOT NULL,
+    cep_ VARCHAR(9) NOT NULL,
     state_ VARCHAR(100) NOT NULL,
-    city VARCHAR(100) NOT NULL,
+    city_ VARCHAR(100) NOT NULL,
     address_ VARCHAR(255) NOT NULL,
-    neighbornhood VARCHAR(100) NOT NULL,
-    avatar_path BLOB,
+    neighbornhood_ VARCHAR(100) NOT NULL,
+    avatar_path_ BLOB,
     description_ TEXT
 );
+
 
 CREATE TABLE service_provider (
     id INT PRIMARY KEY,
     name_ VARCHAR(255) NOT NULL,
-    phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(9) NOT NULL,
+    email_ VARCHAR(255) NOT NULL UNIQUE,
+    password_ VARCHAR(255) NOT NULL, 
+    phone_ VARCHAR(14) NOT NULL,
+    cep_ VARCHAR(9) NOT NULL,
     state_ VARCHAR(100) NOT NULL,
-    city VARCHAR(100) NOT NULL,
+    city_ VARCHAR(100) NOT NULL,
     address_ VARCHAR(100) NOT NULL,
-    neighbornhood VARCHAR(100) NOT NULL,
-    avatar_path BLOB
+    neighbornhood_ VARCHAR(100) NOT NULL,
+    avatar_path_ BLOB
     description_ TEXT
 );
 
@@ -37,30 +42,31 @@ CREATE TABLE categories (
         'Fotógrafo'
     ) NOT NULL
 );
+
 CREATE TABLE provider_category (
     id INT PRIMARY KEY,
-    category_id INT NOT NULL,
-    service_provider_id INT NOT NULL,
+    category_id_ INT NOT NULL,
+    service_provider_id_ INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES Categories(id),
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
 CREATE TABLE availability_ (
     id INT PRIMARY KEY,
-    service_provider_id INT NOT NULL,
-    start_time TIME NOT NULL,
-    ending_time TIME NOT NULL,
-    shift_code ENUM('1', '2', '3') NOT NULL,
-    duration INT NOT NULL,
-    intervale INT NOT NULL,
+    service_provider_id_ INT NOT NULL,
+    start_time_ TIME NOT NULL,
+    ending_time_ TIME NOT NULL,
+    shift_code_ ENUM('1', '2', '3') NOT NULL,
+    duration_ INT NOT NULL,
+    intervale_ INT NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
 CREATE TABLE scheduling (
     id INT PRIMARY KEY,
-    customer_id INT NOT NULL,
-    service_provider_id INT NOT NULL,
-    category_id INT NOT NULL,
-    availability_id INT NOT NULL,
-    dt DATETIME NOT NULL,
+    customer_id_ INT NOT NULL,
+    service_provider_id_ INT NOT NULL,
+    category_id_ INT NOT NULL,
+    availability_id_ INT NOT NULL,
+    dt_ DATETIME NOT NULL,
     status_ ENUM(
         'Pendente',
         'Concluído',
