@@ -1,33 +1,33 @@
 CREATE DATABASE prestaqui;
 USE prestaqui;
-CREATE TABLE customer (
-    id INT PRIMARY KEY,
-    name_ VARCHAR(255) NOT NULL,
-    email_ VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL, 
-    phone_ VARCHAR(15) NOT NULL,
-    cep_ VARCHAR(9) NOT NULL,
-    state_ VARCHAR(100) NOT NULL,
-    city_ VARCHAR(100) NOT NULL,
-    address_ VARCHAR(255) NOT NULL,
-    neighbornhood_ VARCHAR(100) NOT NULL,
-    avatar_path_ BLOB,
-    description_ TEXT
-);
-
 
 CREATE TABLE service_provider (
     id INT PRIMARY KEY,
-    name_ VARCHAR(255) NOT NULL,
     email_ VARCHAR(255) NOT NULL UNIQUE,
     password_ VARCHAR(255) NOT NULL, 
+    name_ VARCHAR(255) NOT NULL,
     phone_ VARCHAR(14) NOT NULL,
     cep_ VARCHAR(9) NOT NULL,
     state_ VARCHAR(100) NOT NULL,
     city_ VARCHAR(100) NOT NULL,
-    address_ VARCHAR(100) NOT NULL,
+    locality VARCHAR(100) NOT NULL,
     neighbornhood_ VARCHAR(100) NOT NULL,
     avatar_path_ BLOB
+    description_ TEXT
+);
+
+CREATE TABLE customer (
+    id INT PRIMARY KEY,
+    email_ VARCHAR(255) NOT NULL UNIQUE,
+    password_ VARCHAR(255) NOT NULL, 
+    name_ VARCHAR(255) NOT NULL,
+    phone_ VARCHAR(15) NOT NULL,
+    cep_ VARCHAR(9) NOT NULL,
+    state_ VARCHAR(100) NOT NULL,
+    city_ VARCHAR(100) NOT NULL,
+    locality VARCHAR(255) NOT NULL,
+    neighbornhood_ VARCHAR(100) NOT NULL,
+    avatar_path_ BLOB,
     description_ TEXT
 );
 
@@ -50,6 +50,7 @@ CREATE TABLE provider_category (
     FOREIGN KEY (category_id) REFERENCES Categories(id),
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
+
 CREATE TABLE availability_ (
     id INT PRIMARY KEY,
     service_provider_id_ INT NOT NULL,
@@ -60,6 +61,7 @@ CREATE TABLE availability_ (
     intervale_ INT NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
 );
+
 CREATE TABLE scheduling (
     id INT PRIMARY KEY,
     customer_id_ INT NOT NULL,

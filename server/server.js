@@ -29,7 +29,7 @@ db.connect((err) => {
 
 // Route to register users
 app.post('/register', async (req, res) => {
-    const { name_, phone, cep, state_, city, address, neighbornhood, avatar_path, description_} = req.body; // Get email and password from the request body
+    const { email, password} = req.body; // Get email and password from the request body
     const hashedPassword = await bcrypt.hash(password, 10); // Encrypt the password for security
 
     // Check if the user already exists
