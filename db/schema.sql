@@ -1,38 +1,23 @@
 CREATE DATABASE prestaqui;
 USE prestaqui;
-
-CREATE TABLE service_provider (
-    id INT PRIMARY KEY,
-    email_ VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL, 
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_type ENUM('Prestador de serviço', 'Cliente') NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_ VARCHAR(255) NOT NULL,
     name_ VARCHAR(255) NOT NULL,
-    phone_ VARCHAR(14) NOT NULL,
-    cep_ VARCHAR(9) NOT NULL,
-    state_ VARCHAR(100) NOT NULL,
-    city_ VARCHAR(100) NOT NULL,
-    locality VARCHAR(100) NOT NULL,
-    neighbornhood_ VARCHAR(100) NOT NULL,
-    avatar_path_ BLOB
+    phone VARCHAR(14) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    state_ VARCHAR(50) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    neighborhood VARCHAR(100) NOT NULL,
+    address_line VARCHAR(255) NOT NULL,
+    complement VARCHAR(255),
+    avatar_path BLOB,
     description_ TEXT
 );
-
-CREATE TABLE customer (
-    id INT PRIMARY KEY,
-    email_ VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL, 
-    name_ VARCHAR(255) NOT NULL,
-    phone_ VARCHAR(15) NOT NULL,
-    cep_ VARCHAR(9) NOT NULL,
-    state_ VARCHAR(100) NOT NULL,
-    city_ VARCHAR(100) NOT NULL,
-    locality VARCHAR(255) NOT NULL,
-    neighbornhood_ VARCHAR(100) NOT NULL,
-    avatar_path_ BLOB,
-    description_ TEXT
-);
-
 CREATE TABLE categories (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name_ ENUM(
         'Eletricista',
         'Pintor',
@@ -42,41 +27,38 @@ CREATE TABLE categories (
         'Fotógrafo'
     ) NOT NULL
 );
-
 CREATE TABLE provider_category (
-    id INT PRIMARY KEY,
-    category_id_ INT NOT NULL,
-    service_provider_id_ INT NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES Categories(id),
-    FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT NOT NULL,
+    service_provider_id INT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (service_provider_id) REFERENCES users(id)
 );
-
 CREATE TABLE availability_ (
-    id INT PRIMARY KEY,
-    service_provider_id_ INT NOT NULL,
-    start_time_ TIME NOT NULL,
-    ending_time_ TIME NOT NULL,
-    shift_code_ ENUM('1', '2', '3') NOT NULL,
-    duration_ INT NOT NULL,
-    intervale_ INT NOT NULL,
-    FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id)
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    service_provider_id INT NOT NULL,
+    start_time TIME NOT NULL,
+    ending_time TIME NOT NULL,
+    shift_code ENUM('1', '2', '3') NOT NULL,
+    duration INT NOT NULL,
+    interval_ INT NOT NULL,
+    FOREIGN KEY (service_provider_id) REFERENCES users(id)
 );
-
 CREATE TABLE scheduling (
-    id INT PRIMARY KEY,
-    customer_id_ INT NOT NULL,
-    service_provider_id_ INT NOT NULL,
-    category_id_ INT NOT NULL,
-    availability_id_ INT NOT NULL,
-    dt_ DATETIME NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    service_provider_id INT NOT NULL,
+    category_id INT NOT NULL,
+    availability_id INT NOT NULL,
+    date_time DATETIME NOT NULL,
     status_ ENUM(
         'Pendente',
         'Concluído',
         'Cancelado',
         'Aguardando validação'
     ) NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES Customer(id),
-    FOREIGN KEY (service_provider_id) REFERENCES ServiceProvider(id),
-    FOREIGN KEY (category_id) REFERENCES Categories(id),
-    FOREIGN KEY (availability_id) REFERENCES Availability(id)
+    FOREIGN KEY (customer_id) REFERENCES users(id),
+    FOREIGN KEY (service_provider_id) REFERENCES users(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (availability_id) REFERENCES availability_(id)
 );
