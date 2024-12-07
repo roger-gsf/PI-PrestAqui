@@ -14,7 +14,6 @@ CREATE TABLE users (
     address_line VARCHAR(255) NOT NULL,
     complement VARCHAR(255),
     avatar_path BLOB,
-    description_ TEXT
 );
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,7 +22,7 @@ CREATE TABLE categories (
         'Pintor',
         'Faxineiro',
         'Chaveiro',
-        'Maquiador',
+        'Pedreiro',
         'Fotógrafo'
     ) NOT NULL
 );
