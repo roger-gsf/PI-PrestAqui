@@ -1,0 +1,41 @@
+.eletricista {
+    background-color: #31C2B9;
+}
+
+.pintor {
+    background-color: #A61608;
+}
+
+.faxineiro {
+    background-color: #8BC34A;
+}
+
+.chaveiro {
+    background-color: #B0BEC5;
+}
+
+.pedreiro {
+    background-color: #E91E63;
+
+}
+
+.fotografo {
+    background-color: #304261;
+}
+
+.eletricista, 
+.pintor, 
+.faxineiro,
+.chaveiro,
+.pedreiro,
+.fotografo {
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+    padding-top: 7px;
+    height: 30px;
+    font-size: .8em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: var(--white);
+}
