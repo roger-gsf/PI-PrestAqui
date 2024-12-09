@@ -62,6 +62,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    margin-bottom: 100px;
 }
 
 main .scheduling__actions {
@@ -112,7 +113,7 @@ main .scheduling__container {
 
 .scheduling {
     /* background-color: red; */
-    width: 300px;
+    width: 320px;
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -121,7 +122,7 @@ main .scheduling__container {
 }
 
 .scheduling h3, 
-.scheduling h4 {
+.scheduling h4{
     font-family: 'Poppins', sans-serif;
     color: var(--white); 
 }
@@ -141,13 +142,21 @@ h3 {
 .scheduling #scheduling__time, 
 .scheduling #scheduling__status, 
 .scheduling #scheduling__description {
-    color: var(--button-color);
+    color: var(--button-color) !important;
     font-weight: 600;
+}
+
+.scheduling #service__provider__name {
+    font-family: 'Poppins', sans-serif;
+    font-size: .9em;
 }
 
 .scheduling .service__provider__info {
     display: flex;
+    /* flex-direction: row; */
     gap: 5px;
+    align-items: center;
+    /* background-color: red; */
 }
 
 #whatsapp-logo {
@@ -159,3 +168,22 @@ h3 {
     flex-wrap: wrap;
     gap: 10px;
 }
+
+.scheduling .scheduling__cancel {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    background: #DBCECE;
+    border: 1px solid #F91212;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    height: 30px;
+    width: 150px;
+    margin: 10px 120px;
+    transition: .7s ease;
+    cursor: pointer;
+}
+
+.scheduling .scheduling__cancel:hover {
+    background: #aaa5a5;
+}
+
