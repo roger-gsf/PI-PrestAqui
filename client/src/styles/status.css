@@ -3,17 +3,7 @@
 }
 
 .concluido {
-    background-color: #1ABA20;
-    border-radius: 10px;
-    width: 200px;
-    text-align: center;
-    padding-top: 7px;
-    height: 40px;
-    font-size: .8em;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bold;
-    color: var(--white);
-    
+    background-color: #1ABA20; 
 }
 
 .cancelado {
@@ -29,18 +19,15 @@
 .cancelado,
 .aguardando__validacao {
     border-radius: 10px;
-    width: 200px;
+    width: 100px;
     text-align: center;
     padding-top: 7px;
-    height: 40px;
+    height: 30px;
     font-size: .8em;
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
-    color: var(--white);
+    color: var(--white) !important;
 }
-
-
-
 
 
 .card__pendente {
