@@ -1,0 +1,60 @@
+.pendente {
+    background-color: #E28000;
+}
+
+.concluido {
+    background-color: #1ABA20;
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    padding-top: 7px;
+    height: 40px;
+    font-size: .8em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: var(--white);
+    
+}
+
+.cancelado {
+    background-color: #E83636;
+}
+
+.aguardando__validacao {
+    background-color: #6D7275;
+}
+
+.pendente,
+.concluido,
+.cancelado,
+.aguardando__validacao {
+    border-radius: 10px;
+    width: 200px;
+    text-align: center;
+    padding-top: 7px;
+    height: 40px;
+    font-size: .8em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    color: var(--white);
+}
+
+
+
+
+
+.card__pendente {
+    background-color: #F2A541 !important;
+}
+
+.card__concluido {
+    background-color: #4CAF50;
+}
+
+.card__cancelado {
+    background-color: #E57373;
+}
+
+.card__aguardando__validacao {
+    background-color: #6D7275;
+}

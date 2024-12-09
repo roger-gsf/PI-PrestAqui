@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="../../../styles/status.css">
+        <link rel="stylesheet" href="../../../styles/category.css">
         <link rel="stylesheet" href="../../../../src/styles/reset.css">
         <link rel="stylesheet" href="../../../../src/styles/util.css">
         <!-- <link rel="stylesheet" href="../../styles/styles.css"> -->
@@ -38,27 +40,34 @@
 
             <section class="scheduling__container">
 
-                <div class="scheduling">
+                <div class="scheduling card__pendente">
                     
                     <h3 id="scheduling__title">#3245 - TROCAR TOMADA</h3>
 
                     <div class="service__provider__info">
 
-                        <h4> Prestador: <span id="service__provider__name">Rogér Ferreira</span> </h4>
+                        <h4> Prestador: <div id="service__provider__name">Rogér Ferreira</div> </h4>
                         
-                        <img src="" alt="Whatsapp">
+                        <img src="../../../assets/img/whatsapp-logo.png" alt="Whatsapp" id="whatsapp-logo">
                     </div>
 
                     <h4> Horário <span id="scheduling__time">12/07/2024 - 14h</span></h4>
+                    
+                    <h4> Descrição: <span id="scheduling__description">Trocar tomada do quarto</span></h4>
 
                 
-                    <h4>Status: <span id="scheduling__status">PENDENTE</span></h4>
+                    <h4>Status: <span id="scheduling__status" class="concluido">PENDENTE</span></h4>
 
 
                     <h4>Category:</h4>
 
                     <div class="category" id="scheduling__categories">
-                        <div class="category-eletrician">ELETRICISTA</div><!-- Category fetched by the database -->
+                        <div class="eletricista">ELETRICISTA</div><!-- Category fetched by the database -->
+                        <!-- <div class="pintor">PINTOR</div>
+                        <div class="faxineiro">FAXINEIRO</div>
+                        <div class="chaveiro">CHAVEIRO</div>
+                        <div class="pedreiro">PEDREIRO</div>
+                        <div class="fotografo">FOTOGRAGO</div> -->
                     </div>
 
                     <button class="scheduling__cancel">CANCELAR VISITA</button>

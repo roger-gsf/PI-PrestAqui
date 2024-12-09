@@ -97,3 +97,65 @@ main .scheduling__actions .new__scheduling:hover {
     transition: .9s ease-out;
 }
 
+
+
+main .scheduling__container {
+    /* background-color: aqua; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    margin-top: 20px;    
+}
+
+
+.scheduling {
+    /* background-color: red; */
+    width: 300px;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.scheduling h3, 
+.scheduling h4 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--white); 
+}
+
+h3 {
+    font-size: 1.15em;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.scheduling h4 {
+    font-size: .9em;
+}
+
+
+.scheduling #service__provider__name, 
+.scheduling #scheduling__time, 
+.scheduling #scheduling__status, 
+.scheduling #scheduling__description {
+    color: var(--button-color);
+    font-weight: 600;
+}
+
+.scheduling .service__provider__info {
+    display: flex;
+    gap: 5px;
+}
+
+#whatsapp-logo {
+    height: 20px;
+}
+
+.scheduling .category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
