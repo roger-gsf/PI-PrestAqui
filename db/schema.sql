@@ -50,6 +50,8 @@ CREATE TABLE scheduling (
     category_id INT NOT NULL,
     availability_id INT NOT NULL,
     date_time DATETIME NOT NULL,
+    title VARCHAR(30) NOT NULL,
+    description_ VARCHAR(50) NOT NULL,
     status_ ENUM(
         'Pendente',
         'Concluído',
