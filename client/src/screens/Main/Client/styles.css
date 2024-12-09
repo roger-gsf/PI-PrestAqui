@@ -1,0 +1,99 @@
+body {
+    background-color: var(--blue-dark);
+}
+
+/* Header Style */
+
+header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    height: 30vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+header figure.logo__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 25vh;
+}
+
+img.prestaqui__logo {
+    height: 200px;
+}
+
+
+header .user__welcome {
+    text-indent: 20px;
+    display: flex;
+    align-items: center;
+}
+
+header .user__welcome #user__profile {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    background-color: var(--white);
+}
+
+
+h1 {
+    font-size: 1.1em;
+    color: var(--white);
+    font-weight: 200;
+}
+
+#user__name {
+    font-weight: bold;
+}
+
+main {
+    margin-top: 60px;
+}
+
+
+
+/* Main Style */
+
+main {
+    /* background-color: red; */
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+main .scheduling__actions {
+    /* background-color: pink; */
+    font-family: 'Poppins', sans-serif;
+    color: var(--white);
+
+    font-size: .75em;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    /* gap: 30px; */
+    justify-content: space-evenly;
+}
+
+main .scheduling__actions .new__scheduling {
+    /* background-color: red; */
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--button-second-color);
+    font-weight: 600;
+    color: var(--white);
+    width: 140px;
+    /* padding: 5px; */
+    cursor: pointer;
+
+}
+
+main .scheduling__actions .new__scheduling:hover {
+    background-color: var(--accent-lightblue);
+    transition: .9s ease-out;
+}
+
