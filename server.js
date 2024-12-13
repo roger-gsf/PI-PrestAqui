@@ -34,6 +34,11 @@ db.connect((err) => {
 app.post('/register', async (req, res) => {
     const { email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, userType } = req.body;
 
+    // Validate userType
+    if (userType !== 'service_provider' && userType !== 'customer') {
+        return res.status(400).send('Invalid userType. Must be "service_provider" or "customer".');
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(password_, 10);
 
@@ -59,6 +64,7 @@ app.post('/register', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
+
 
 // Login route
 app.post('/login', (req, res) => {
