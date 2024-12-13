@@ -32,21 +32,28 @@ db.connect((err) => {
 
 // Register route
 app.post('/register', async (req, res) => {
-    const { email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, description_, user_type } = req.body;
+    const { email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, userType } = req.body;
+
+    // Validate userType
+    if (userType !== 'service_provider' && userType !== 'customer') {
+        return res.status(400).send('Invalid userType. Must be "service_provider" or "customer".');
+    }
 
     try {
         const hashedPassword = await bcrypt.hash(password_, 10);
 
-        db.query('SELECT email FROM users WHERE email = ?', [email], (err, result) => {
+        const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
+
+        db.query(`SELECT email FROM ${tableName} WHERE email = ?`, [email], (err, result) => {
             if (err) throw err;
             if (result.length > 0) {
                 return res.status(400).send('This email is already registered');
             }
 
             db.query(
-                `INSERT INTO users (email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, description_, user_type)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [email, hashedPassword, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, description_, user_type],
+                `INSERT INTO ${tableName} (email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [email, hashedPassword, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path],
                 (err) => {
                     if (err) throw err;
                     res.send('User registered successfully!');
@@ -58,18 +65,20 @@ app.post('/register', async (req, res) => {
     }
 });
 
+
 // Login route
 app.post('/login', (req, res) => {
-    const { email, password_ } = req.body;
+    const { email, password_, userType } = req.body;
+    const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
-    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
+    db.query(`SELECT * FROM ${tableName} WHERE email = ?`, [email], async (err, result) => {
         if (err) throw err;
 
         if (result.length === 0 || !(await bcrypt.compare(password_, result[0].password_))) {
             return res.status(400).send('Invalid email or password');
         }
 
-        req.session.user = { id: result[0].id, email };
+        req.session.user = { id: result[0].id, email, userType };
         res.send('Logged in successfully!');
     });
 });
@@ -84,9 +93,10 @@ const authenticateSession = (req, res, next) => {
 
 // Get user details
 app.get('/user', authenticateSession, (req, res) => {
-    const { id } = req.session.user;
+    const { id, userType } = req.session.user;
+    const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
-    db.query('SELECT * FROM users WHERE id = ?', [id], (err, result) => {
+    db.query(`SELECT * FROM ${tableName} WHERE id = ?`, [id], (err, result) => {
         if (err) throw err;
 
         if (result.length === 0) {
@@ -100,9 +110,10 @@ app.get('/user', authenticateSession, (req, res) => {
 app.put('/user', authenticateSession, async (req, res) => {
     const { newEmail, newPassword } = req.body;
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const { id } = req.session.user;
+    const { id, userType } = req.session.user;
+    const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
-    db.query('UPDATE users SET email = ?, password_ = ? WHERE id = ?', [newEmail, hashedPassword, id], (err, result) => {
+    db.query(`UPDATE ${tableName} SET email = ?, password_ = ? WHERE id = ?`, [newEmail, hashedPassword, id], (err, result) => {
         if (err) throw err;
 
         if (result.affectedRows === 0) {
@@ -116,9 +127,10 @@ app.put('/user', authenticateSession, async (req, res) => {
 
 // Delete user
 app.delete('/user', authenticateSession, (req, res) => {
-    const { id } = req.session.user;
+    const { id, userType } = req.session.user;
+    const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
-    db.query('DELETE FROM users WHERE id = ?', [id], (err, result) => {
+    db.query(`DELETE FROM ${tableName} WHERE id = ?`, [id], (err, result) => {
         if (err) throw err;
 
         if (result.affectedRows === 0) {
