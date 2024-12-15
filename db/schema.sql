@@ -54,7 +54,7 @@ CREATE TABLE service_info (
     description_ VARCHAR(255) NOT NULL,
     start_time TIME NOT NULL,
     ending_time TIME NOT NULL,
-    shift_code ENUM('Manhã', 'Tarde', 'Noite') NOT NULL,
+    day_shift ENUM('Manhã', 'Tarde', 'Noite') NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES service_provider(id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
