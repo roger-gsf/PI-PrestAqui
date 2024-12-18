@@ -66,7 +66,6 @@ CREATE TABLE scheduling (
     service_info_id INT NOT NULL,
     date_time DATETIME NOT NULL,
     status_ ENUM(
-        'Em aberto',
         'Em andamento',
         'Concluído',
         'Cancelado',
