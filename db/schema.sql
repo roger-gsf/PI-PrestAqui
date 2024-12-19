@@ -1,33 +1,31 @@
 CREATE DATABASE prestaqui;
 USE prestaqui;
+
+CREATE TABLE user (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_ VARCHAR(255) NOT NULL,
+    name_ VARCHAR(255) NOT NULL,
+    phone VARCHAR(14) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    state_ VARCHAR(50) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    neighborhood VARCHAR(100) NOT NULL,
+    address_line VARCHAR(255) NOT NULL,
+    complement VARCHAR(255),
+    avatar_path VARCHAR(500)
+);
+
 CREATE TABLE service_provider (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL,
-    name_ VARCHAR(255) NOT NULL,
-    phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(9) NOT NULL,
-    state_ VARCHAR(50) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    neighborhood VARCHAR(100) NOT NULL,
-    address_line VARCHAR(255) NOT NULL,
-    complement VARCHAR(255),
-    avatar_path BLOB
+    user_id INT NOT NULL REFERENCES user(user_id)
 );
+
 CREATE TABLE customer (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL,
-    name_ VARCHAR(255) NOT NULL,
-    phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(9) NOT NULL,
-    state_ VARCHAR(50) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    neighborhood VARCHAR(100) NOT NULL,
-    address_line VARCHAR(255) NOT NULL,
-    complement VARCHAR(255),
-    avatar_path BLOB
+    user_id INT NOT NULL REFERENCES user(user_id)
 );
+
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name_ ENUM(
@@ -39,6 +37,7 @@ CREATE TABLE categories (
         'Fotógrafo'
     ) NOT NULL
 );
+
 CREATE TABLE has_category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -46,18 +45,15 @@ CREATE TABLE has_category (
     FOREIGN KEY (category_id) REFERENCES categories(id),
     FOREIGN KEY (service_provider_id) REFERENCES service_provider(id)
 );
+
 CREATE TABLE service_info (
     id INT AUTO_INCREMENT PRIMARY KEY,
     service_provider_id INT NOT NULL,
     customer_id INT NOT NULL,
-    title VARCHAR(30) NOT NULL,
-    description_ VARCHAR(255) NOT NULL,
-    start_time TIME NOT NULL,
-    ending_time TIME NOT NULL,
-    day_shift ENUM('Manhã', 'Tarde', 'Noite') NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES service_provider(id),
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
+
 CREATE TABLE scheduling (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
@@ -71,6 +67,11 @@ CREATE TABLE scheduling (
         'Cancelado',
         'Aguardando validação'
     ) NOT NULL,
+    title VARCHAR(30) NOT NULL,
+    description_ VARCHAR(255) NOT NULL,
+    start_time TIME NOT NULL,
+    ending_time TIME NOT NULL,
+    day_shift ENUM('Manhã', 'Tarde', 'Noite') NOT NULL,
     FOREIGN KEY (service_provider_id) REFERENCES service_provider(id),
     FOREIGN KEY (customer_id) REFERENCES customer(id),
     FOREIGN KEY (category_id) REFERENCES categories(id),
