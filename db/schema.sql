@@ -3,11 +3,11 @@ USE prestaqui;
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password_ VARCHAR(255) NOT NULL,
-    name_ VARCHAR(255) NOT NULL,
+    user_password VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     phone VARCHAR(14) NOT NULL,
     cep VARCHAR(9) NOT NULL,
-    state_ VARCHAR(50) NOT NULL,
+    user_state VARCHAR(50) NOT NULL,
     city VARCHAR(100) NOT NULL,
     neighborhood VARCHAR(100) NOT NULL,
     address_line VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE customer (
 );
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name_ ENUM(
+    category_name ENUM(
         'Eletricista',
         'Pintor',
         'Faxineiro',
@@ -46,7 +46,7 @@ CREATE TABLE scheduling (
     service_provider_id INT NOT NULL,
     category_id INT NOT NULL,
     title VARCHAR(30) NOT NULL,
-    description_ VARCHAR(255) NOT NULL,
+    service_description VARCHAR(255) NOT NULL,
     date_time DATETIME NOT NULL,
     start_time TIME NOT NULL,
     ending_time TIME NOT NULL,
