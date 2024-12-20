@@ -33,7 +33,7 @@ db.connect((err) => {
 
 // Register route
 app.post('/register', async (req, res) => {
-    const { email, user_password, username, phone, cep, user_state, city, neighborhood, address_line, complement, avatar_path, userType } = req.body;
+    const { user_email, user_password, user_name, user_phone, user_cep, user_state, user_city, user_neighborhood, user_address_line, user_complement, user_avatar_path, userType } = req.body;
 
     // Validate userType
     if (userType !== 'service_provider' && userType !== 'customer') {
@@ -46,7 +46,7 @@ app.post('/register', async (req, res) => {
         db.query(
             `INSERT INTO user (email, user_password, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [email, hashedPassword, username, phone, cep, user_state, city, neighborhood, address_line, complement, avatar_path],
+            [user_email, hashedPassword, user_name, user_phone, user_cep, user_state, user_city, user_neighborhood, user_address_line, user_complement, user_avatar_path],
             (err, result) => {
                 if (err) throw err;
 
@@ -70,7 +70,7 @@ app.post('/register', async (req, res) => {
 
 // Login route
 app.post('/login', (req, res) => {
-    const { email, user_password, userType } = req.body;
+    const { user_email, user_password, userType } = req.body;
     const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
     db.query(`SELECT * FROM user WHERE email = ?`, [email], async (err, result) => {

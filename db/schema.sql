@@ -1,18 +1,18 @@
 CREATE DATABASE prestaqui;
 USE prestaqui;
 CREATE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_email VARCHAR(255) NOT NULL UNIQUE,
     user_password VARCHAR(255) NOT NULL,
-    username VARCHAR(255) NOT NULL,
-    phone VARCHAR(14) NOT NULL,
-    cep VARCHAR(9) NOT NULL,
+    user_name VARCHAR(255) NOT NULL,
+    user_phone VARCHAR(14) NOT NULL,
+    user_cep VARCHAR(9) NOT NULL,
     user_state VARCHAR(50) NOT NULL,
-    city VARCHAR(100) NOT NULL,
-    neighborhood VARCHAR(100) NOT NULL,
-    address_line VARCHAR(255) NOT NULL,
-    complement VARCHAR(255),
-    avatar_path VARCHAR(500)
+    user_city VARCHAR(100) NOT NULL,
+    user_neighborhood VARCHAR(100) NOT NULL,
+    user_address_line VARCHAR(255) NOT NULL,
+    user_complement VARCHAR(255),
+    user_avatar_path VARCHAR(500)
 );
 CREATE TABLE service_provider (
     id INT AUTO_INCREMENT PRIMARY KEY,
