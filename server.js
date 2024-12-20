@@ -19,6 +19,7 @@ app.use(session({
 }));
 
 const db = mysql.createConnection({
+    port: process.env.DB_PORT,
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
@@ -32,7 +33,7 @@ db.connect((err) => {
 
 // Register route
 app.post('/register', async (req, res) => {
-    const { email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path, userType } = req.body;
+    const { email, user_password, username, phone, cep, user_state, city, neighborhood, address_line, complement, avatar_path, userType } = req.body;
 
     // Validate userType
     if (userType !== 'service_provider' && userType !== 'customer') {
@@ -40,12 +41,12 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(password_, 10);
+        const hashedPassword = await bcrypt.hash(user_password, 10);
 
         db.query(
-            `INSERT INTO user (email, password_, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path)
+            `INSERT INTO user (email, user_password, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [email, hashedPassword, name_, phone, cep, state_, city, neighborhood, address_line, complement, avatar_path],
+            [email, hashedPassword, username, phone, cep, user_state, city, neighborhood, address_line, complement, avatar_path],
             (err, result) => {
                 if (err) throw err;
 
@@ -69,13 +70,13 @@ app.post('/register', async (req, res) => {
 
 // Login route
 app.post('/login', (req, res) => {
-    const { email, password_, userType } = req.body;
+    const { email, user_password, userType } = req.body;
     const tableName = userType === 'service_provider' ? 'service_provider' : 'customer';
 
     db.query(`SELECT * FROM user WHERE email = ?`, [email], async (err, result) => {
         if (err) throw err;
 
-        if (result.length === 0 || !(await bcrypt.compare(password_, result[0].password_))) {
+        if (result.length === 0 || !(await bcrypt.compare(user_password, result[0].user_password))) {
             return res.status(400).send('Invalid email or password');
         }
 
@@ -122,7 +123,7 @@ app.put('/user', authenticateSession, async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const { id } = req.session.user;
 
-    db.query(`UPDATE user SET email = ?, password_ = ? WHERE id = ?`, [newEmail, hashedPassword, id], (err, result) => {
+    db.query(`UPDATE user SET email = ?, user_password = ? WHERE id = ?`, [newEmail, hashedPassword, id], (err, result) => {
         if (err) throw err;
 
         if (result.affectedRows === 0) {
